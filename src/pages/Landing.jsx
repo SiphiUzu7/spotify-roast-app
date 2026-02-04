@@ -10,16 +10,16 @@ function Landing() {
       <div className="landingRoastText">
         <h1 className="landingHeader">
             Get Roasted Based On 
-            <span className='landingHeaderGreen'>Your Spotify Listen History!</span>
+            <span className='landingHeaderGreen'>Your Spotify Plays!</span>
         </h1>
       </div>
       <img 
       src={heroArtwork} 
-      alt="" 
+      alt="Hero Banner" 
       className="landingHeroArtwork" 
       />
       <LoginButton/>
-      <CopyTag/>
+      <CopyTag text="By Logging In, You Agree To Get Roasted 🔥"/>
     </>
   )
 }
