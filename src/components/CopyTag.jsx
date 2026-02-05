@@ -1,11 +1,12 @@
 
 
-function CopyTag() {
+function CopyTag({ text }) {
     return (
         <div className="copy-tag">
-            <p>By Logging In, You Agree To Get Roasted 🔥</p>
+            <p>{text}</p>
          </div>
     );
 };
 
 export default CopyTag;
+
