@@ -13,6 +13,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*Common UI Components*/
+
 .logoClass{
   display: block;
   margin-left: auto;
@@ -20,29 +22,8 @@
   margin-top: 2.5em;
 }
 
-.landingHeader{
-  text-align: center;
-  font-size: 2em;
-  font-weight: 300;
-  margin-top: 2.25em;
-}
 
-.landingHeaderGreen{
-  display: block;
-  color: #1DB954;
-  font-weight: 600;
-}
-
-
-.landingHeroArtwork{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-  height: 600px;
-}
-
-.login-button{
+.login-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -52,19 +33,201 @@
   color: white;
   border: none;
   border-radius: 40px;
-  font-size: 15px; 
+  font-size: 13px; 
+  font-weight: 600;
 }
+
+.roast-button{
+  display: block;
+  margin-left: auto;
+  margin-top: 1em;
+  padding: 12.5px 40px 12.5px 40px;
+  background-color: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 13px; 
+  font-weight: 600;
+}
+
+
+.share-button{
+  display: block;
+  margin-right: auto;
+  margin-top: 1em;
+  padding: 12.5px 40px 12.5px 40px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 40px;
+  font-size: 13px; 
+  font-weight: 600;
+}
+
+.roastButtonSection{
+  display:flex;
+  gap: 13px;
+  margin-top: 1.5em;
+}
+
+
+.logout-button{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.5em;
+  padding: 12.5px 40px 12.5px 40px;
+  background-color: #171717;
+  color: white;
+  border: 1px solid #4a4747;
+  border-radius: 40px;
+  font-size: 13px; 
+  font-weight: 600;
+}
+
 
 .copy-tag{
   position: relative;
   text-align: center;
-  font-size: 15px;
+  font-size: 13px;
   margin: 2em auto;
   color: #fff;
   background-color: #171717;
-  padding: 0.25px 20px 0.25px 20px;
+  padding: 0.25px 15px 0.25px 15px;
   width:350px;
   border-radius: 40px;
   border: 1px solid #4a4747;
+}
+
+
+.divider{
+  border-top: 1.5px solid #656565;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+
+
+/*Headers and Text*/
+
+.landingHeader, .fetchDataText, .roastText{
+  text-align: center;
+  font-size: 1.75em;
+  font-weight: 300;
+  margin-top: 2.25em;
+}
+
+
+.landingHeaderGreen{
+  display: block;
+  color: #1DB954;
+  font-weight: 600;
+}
+
+
+.fetchDataHeader{
+  font-size: 1em;
+
+}
+
+
+.roastHeader{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0em !important;
+  font-size: 1em;
+}
+
+
+.roastHeader .logoClass{
+  margin: 0;
+  display: inline-block;
+  width: 200px;
+  margin-bottom: 13px;
+  margin-left: -28px;
+  z-index: -1;
+}
+
+
+.roastExclamation{
+  margin-left: -35px !important;
+}
+
+
+.roastCardText{
+  text-align: center;
+  padding: 2em;
+  margin-top: 2em;
+  font-weight: 600;
+  font-size: large;
+}
+
+
+.roastCardScoreList{
+  text-align: center;
+  padding: 2em;
+  font-weight: 600;
+  font-size: large;
+}
+
+
+.roastCardFooter{
+  text-align: center;
+  position: absolute;
+  padding: 2em;
+  margin-top: -2em;
+  font-weight: 600;
+  font-size: large;
+  z-index: 3;
+}
+
+
+/*Artwork*/
+
+.roastCardContainer{
+  position: relative;
+  width: 400px;
+  height: 550px;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #3c3c3c;
+  border: 1.5px solid #656565;
+  border-radius: 15px;
+}
+
+.landingHeroArtwork{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 420px;
+  height: 400px;
+}
+
+.fetchLoadGif{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3.5em;
+  width:285px;
+  height: 315px;
+}
+
+.shareFlameGifOverlay{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.roastCardBody{
+  position: relative;
+  z-index: 1;
+  width: 400px;
+  height: 550px;
+  
 }
 
