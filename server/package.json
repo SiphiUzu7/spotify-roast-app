@@ -1,0 +1,13 @@
+{
+  "name": "spotify-roast-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.40.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
