@@ -1,6 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react'
-import './App.css'
 import './index.css'
 import Landing from './pages/Landing.jsx'
 import Fetch from './pages/Fetch.jsx'
