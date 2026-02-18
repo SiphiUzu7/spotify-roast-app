@@ -2,6 +2,7 @@ import LogoComponent from '../components/Logo.jsx'
 import heroArtwork from "../assets/HeroArtwork.png";
 import LoginButton from '../components/LoginButton.jsx';
 import CopyTag from '../components/CopyTag.jsx';
+import {loginWithSpotify } from "../lib/spotify/auth.js"
 
 function Landing() {
   return (
