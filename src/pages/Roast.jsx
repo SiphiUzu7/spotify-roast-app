@@ -2,6 +2,8 @@ import LogoComponent from "../components/Logo.jsx";
 import RoastCard from "../components/RoastCard.jsx";
 
 function Roast() {
+  const roast = JSON.parse(sessionStorage.getItem("roast_payload") || "null");
+
   return (
     <>
       <div className="roastText">
@@ -12,7 +14,7 @@ function Roast() {
         </h1>
       </div>
 
-      <RoastCard />
+      <RoastCard roast={roast} />
     </>
   );
 }
