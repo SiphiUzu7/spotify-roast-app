@@ -31,7 +31,7 @@ function Fetch() {
         //Send to backend Gemini endpoint
         const res = await fetch("/api/roast", {
           method: "POST",
-          headers: {"Content-Type" : "applications/json"},
+          headers: { "Content-Type" : "application/json" },
           body: JSON.stringify({ profile }),
         });
 
