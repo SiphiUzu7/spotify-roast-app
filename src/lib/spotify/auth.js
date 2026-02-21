@@ -17,7 +17,7 @@ export async function loginWithSpotify() {
     const verifier = generateCodeVerifier(64);
     const challenge = await generateCodeChallenge(verifier);
 
-    sessionStorage.setItem("spotify_code_verifier");
+    sessionStorage.setItem("spotify_code_verifier", verifier);
 
     const params = new URLSearchParams({
         client_id: CLIENT_ID,
