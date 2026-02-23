@@ -3,24 +3,24 @@ import RoastButton from "../components/RoastButton.jsx";
 import ShareButton from "../components/ShareButton.jsx";
 import LogoutButton from "../components/LogoutButton.jsx";
 
-function RoastCard() {
+function RoastCard({ roast, onRoastAgain, onShare, onLogout, isRoasting }) {
+    const roastText = roast?.roastText ?? "Your roast will appear here...";
+    const scores = roast?.scores ?? { cringe: 0, mainCharacterEnergy: 0, tasteLevel: 0};
+    const footer = roast?.footer ?? "";
+
     return(
         <>
         <div className="roastCardContainer">
             <div className="roastCardBody">
-                <p className="roastCardText">
-                    Dang, you're out there livin' your best life as some emo 
-                    meets Metallica meets K-POP sprinkle of mid '00s. Your 
-                    playlist screams "I can be anything but normal!" teehee
-                </p>
+                <p className="roastCardText">{roastText}</p>
                 <div className="divider"></div>
                 <div className="roastCardScoreList">
-                    Cringe: 8.9/10 <br /> Main Character Energy: 3.1/10 <br /> Taste Level: 5.1/10 <br />
+                    Cringe: {scores.cringe}/10 <br />
+                    Main Character Energy: {scores.mainCharacterEnergy}/10 <br />
+                    Taste Level: {scores.tasteLevel}/10 <br />
                 </div>
-                <p className="roastCardFooter">
-                    The good news is, you own 
-                    your chaos like a champ!
-                </p>
+
+                <p className="roastCardFooter">{footer}</p>
 
             </div>
 
@@ -31,11 +31,11 @@ function RoastCard() {
             />
         </div>
         <div className="roastButtonSection">
-            <RoastButton/>
-            <ShareButton/>
+            <RoastButton onClick={onRoastAgain} disabled={isRoasting} label={isRoasting ? "Roasting..." : "Roast Me Again"}/>
+            <ShareButton onClick={onShare} disabled={isRoasting}/>
             
         </div>
-            <LogoutButton/>
+            <LogoutButton onClick={onLogout} disabled={isRoasting}/>
         </>
     );
 };
