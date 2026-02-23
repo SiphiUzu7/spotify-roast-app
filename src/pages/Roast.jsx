@@ -28,9 +28,20 @@ function Roast() {
 
     const profile = JSON.parse(profileRaw);
 
+    const res = await fetch("/api/roast", {
+      method: "POST",
+      headers: { "Content-Type": "application/json"},
+      body: JSON.stringify({ profile }),
+    });
+
     const text = await res.text();
+
     let payload = null;
-    try { payload = JSON.parse(text); } catch{ /* ignore */}
+    try { 
+      payload = JSON.parse(text); 
+    } catch { 
+      /* ignore */
+    }
 
     if(!res.ok){
       if(res.status === 429) {
@@ -79,6 +90,7 @@ function handleLogout(){
   //clear roast + profile data
   sessionStorage.removeItem("roast_payload");
   sessionStorage.removeItem("spotify_profile");
+  navigate("/", { replace: true });
 }
 
 
