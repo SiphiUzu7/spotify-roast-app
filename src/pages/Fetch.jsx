@@ -1,3 +1,4 @@
+import { getAccessToken } from "../lib/spotify/token"
 import { useEffect } from 'react';
 import {useNavigate } from "react-router-dom";
 import LogoComponent from '../components/Logo.jsx'
@@ -13,6 +14,13 @@ function Fetch() {
   useEffect(() => {
     (async () => {
       try {
+
+        const token = getAccessToken();
+        if (!token) {
+          navigate("/", { replace: true });
+          return;
+        }
+
         //Spotify Data
         const me = await getMe();
         const topArtistsRes = await getTopArtists(10);
@@ -27,6 +35,11 @@ function Fetch() {
           topTracks: topTracksRes.items.map((t) => `${t.name} - ${t.artists?.[0]?.name ?? "Unknown"}`),
           recentlyPlayed: recentRes.items.map((i) => `${i.track.name} - ${i.track.artists?.[0]?.name ?? "Uknown"}`),
         };
+
+        //Build a profile object 
+        sessionStorage.setItem("spotify_profile", JSON.stringify(profile));
+
+        
 
         //Send to backend Gemini endpoint
         const res = await fetch("/api/roast", {
@@ -46,6 +59,7 @@ function Fetch() {
         sessionStorage.setItem("roast_payload", JSON.stringify(roast));
         navigate("/roast", {replace: true});
       } catch (e) {
+        console.error("Fetch page failed", e);
         navigate("/", {replace: true});
       }
     })();
