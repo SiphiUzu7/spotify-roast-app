@@ -36,4 +36,8 @@ export function logoutSpotify() {
     sessionStorage.removeItem("spotify_expires_at");
     localStorage.removeItem("spotify_refresh_token");
     sessionStorage.removeItem("spotify_code_verifier");
+
+    //clear app data
+    sessionStorage.removeItem("roast_payload");
+    sessionStorage.removeItem("spotify_profile");
 }
