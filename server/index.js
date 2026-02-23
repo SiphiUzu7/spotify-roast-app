@@ -83,7 +83,7 @@ Recently played: ${(profile.recentlyPlayed ?? []).slice(0, 10).join(", ")}
     const roast = parseGeminiJson(raw);
 
     // Enforce your UI rules server-side
-    roast.roastText = enforceOneSentenceTwentyWords(roast.roastText);
+    roast.roastText = enforceOneSentenceTwentyWords(roast.roastText, 20, profile);
     roast.footer = clamp(roast.footer, 40);
 
     return res.json(roast);
@@ -225,18 +225,43 @@ function firstSentence(value) {
   return (m?.[1] ?? m?.[2] ?? "").trim();
 }
 
-function enforceOneSentenceTwentyWords(value) {
-  let s = firstSentence(value);
-  s = s.replace(/[.!?]+$/, "").trim();
+function enforceOneSentenceTwentyWords(value, n, profile) {
 
-  const words = s.split(" ").filter(Boolean);
-  const fillers = ["honestly", "somehow", "still", "tonight", "though", "anyway", "maybe", "frankly", "basically", "truly"];
+  let s = firstSentence(value).replace(/[.!?]+$/, "").trim();
+  
+  if(!s){
+    s = "Your music taste has confidence, but the repeats reveal you treat the algorithm like a comfort blanket";
+  }
 
-  let finalWords = words;
-  if (finalWords.length > 40) finalWords = finalWords.slice(0, 40);
-  while (finalWords.length < 40) finalWords.push(fillers[(finalWords.length - 1) % fillers.length]);
+  let words = s.split(/\s+/).filter(Boolean);
 
-  return finalWords.join(" ").trim() + ".";
+  if(words.length > n) {
+    return words.slice(0, n).join(" ").trim() + ".";
+  }
+
+  const topArtist = (profile?.topArtists?.[0] ?? "your top artist").toString();
+  const topTrack = (profile?.topTracks?.[0] ?? "your top track").toString();
+
+  const pads = [
+    `like ${topArtist} is your therapist`,
+    `and ${topTrack} is your coping mechanism`,
+    `while your playlists cosplay as personality traits`,
+    `and your algorithm quietly begs for variety`,
+    `yet you still hit repeat with full confidence`,
+  ];
+
+  let i = 0;
+  while (words.length < n) {
+    const padWords = pads[i % pads.length].split(/\s+/);
+    for (const w of padWords){
+        if(words.length >= n) break;
+        words.push(w);
+    }
+    i++;
+  }
+
+  return words.join(" ").replace(/\s+/g, " ").trim() + ".";
+
 }
 
 app.listen(PORT, () => {
