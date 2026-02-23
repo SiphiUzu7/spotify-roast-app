@@ -1,9 +1,7 @@
-
-
-function RoastButton() {
+function RoastButton({ onClick, disabled, label = "Roast Me Again"}) {
     return (
-         <button className="roast-button">
-            Roast Me Again
+         <button className="roast-button" onClick={onClick} disabled={disabled}>
+            {label}
         </button>
     );
 };
