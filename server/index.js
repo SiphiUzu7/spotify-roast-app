@@ -1,8 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+dotenv.config({path: path.join(__dirname, ".env")});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -10,7 +15,7 @@ app.use(express.json({ limit: "1mb" }));
 const PORT = process.env.PORT || 8787;
 
 if (!process.env.GEMINI_API_KEY) {
-  console.error("Missing GEMINI_API_KEY in server/.env");
+  console.error("Missing GEMINI_API_KEY (set it in Render env vars or server/.env)");
   process.exit(1);
 }
 
@@ -107,6 +112,14 @@ Recently played: ${(profile.recentlyPlayed ?? []).slice(0, 10).join(", ")}
   }
 });
 
+const distPath = path.join(__dirname, "..", "dist");
+
+app.use(express.static(distPath));
+
+app.get(/^(?!\/api\/).*/, (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
+});
+
 /* ---------------- Helpers ---------------- */
 
 function getAllCandidateText(response) {
@@ -127,23 +140,81 @@ function containsJson(s) {
   return typeof s === "string" && /[\{\[]/.test(s);
 }
 
+function stripCodeFences(text) {
+  const s = String(text ?? "");
+  const m = s.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  return (m?.[1] ?? s).trim();
+}
+
+// Escapes raw newlines inside JSON strings (common model failure)
+function escapeNewlinesInJsonStrings(s) {
+  let out = "";
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+
+    if (inString) {
+      if (escaped) {
+        out += ch;
+        escaped = false;
+        continue;
+      }
+      if (ch === "\\") {
+        out += ch;
+        escaped = true;
+        continue;
+      }
+      if (ch === '"') {
+        out += ch;
+        inString = false;
+        continue;
+      }
+      if (ch === "\n") {
+        out += "\\n";
+        continue;
+      }
+      if (ch === "\r") {
+        continue;
+      }
+      out += ch;
+      continue;
+    }
+
+    if (ch === '"') {
+      out += ch;
+      inString = true;
+      continue;
+    }
+
+    out += ch;
+  }
+
+  return out;
+}
+
 function parseGeminiJson(rawText) {
+  const unfenced = stripCodeFences(rawText);
   const extracted = extractFirstJsonValue(rawText);
+  const normalized = escapeNewlinesInJsonStrings(extracted)
+    .replace(/[""]/g, '"')
+    .replace(/['']/g, "'");
 
   try {
-    return JSON.parse(extracted);
+    return JSON.parse(normalized);
   } catch {
-    // common model mistake: trailing commas
-    const repaired = extracted.replace(/,\s*([}\]])/g, "$1");
+    const repaired = normalized.replace(/,\s*([}\]])/g, "$1");
     try {
       return JSON.parse(repaired);
-    } catch (e2) {
+    } catch {
       console.error("Raw model output:\n", rawText);
       console.error("Extracted JSON candidate:\n", extracted);
+      console.error("Normalized candidate:\n", normalized)
       console.error("Repaired JSON candidate:\n", repaired);
       throw new Error(
         `Model output was not valid JSON after extraction. First chars: ${JSON.stringify(
-          rawText.slice(0, 80)
+          String(rawText).slice(0, 80)
         )}`
       );
     }
@@ -264,6 +335,6 @@ function enforceOneSentenceTwentyWords(value, n, profile) {
 
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running: http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running port ${PORT}`);
 });
