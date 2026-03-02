@@ -24,7 +24,7 @@ export async function exchangeCodeForToken(code) {
 
     if (!res.ok) {
         const text = await res.text();
-        throw new Error(`Token exchange failed: &{res.status} ${text}`);
+        throw new Error(`Token exchange failed: ${res.status} ${text}`);
     }
     
     const data = await res.json();
@@ -40,4 +40,47 @@ export async function exchangeCodeForToken(code) {
 
     return data;
 
+}
+
+
+export async function refreshAccessToken() {
+    const refreshToken = localStorage.getItem("spotify_refresh_token");
+    if (!refreshToken) throw new Error("Missing refresh token");
+
+    const body = new URLSearchParams({
+    client_id: CLIENT_ID,
+    grant_type: "refresh_token",
+    refresh_token: refreshToken,
+    });
+
+    const res = await fetch("https://accounts.spotify.com/api/token", { method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+});
+
+    if(!res.ok) {
+        const text = await res.text();
+        throw new Error(`Token refresh failed: ${res.status} ${text}`);
+    }
+
+    const data = await res.json();
+
+    sessionStorage.setItem("spotify_access_token", data.access_token);
+    const expiresAt = Date.now() + data.expires_in * 1000 - 30_000;
+    sessionStorage.setItem("spotify_expires_at", String(expiresAt));
+
+
+    if (data.refresh_token) localStorage.setItem("spotify_refresh_token", data.refresh_token);
+
+    return data;
+
+}
+
+export function getAccessToken() {
+    return sessionStorage.getItem("spotify_access_token");
+}
+
+export function isTokenExpired() {
+    const exp = Number(sessionStorage.getItem("spotify_expires_at") || "0");
+    return !exp || Date.now() > exp;
 }

@@ -19,7 +19,7 @@ function Landing() {
       alt="Hero Banner" 
       className="landingHeroArtwork" 
       />
-      <LoginButton/>
+      <LoginButton onClick={loginWithSpotify}/>
       <CopyTag text="By Logging In, You Agree To Get Roasted 🔥"/>
     </>
   )
